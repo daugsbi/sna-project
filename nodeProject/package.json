@@ -1,0 +1,17 @@
+{
+  "name": "sna-project",
+  "version": "0.0.1",
+  "description": "Fetchs twitter followers and following",
+  "main": "fetcher.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "BSD-2-Clause",
+  "dependencies": {
+    "gexf-writer": "~0.1.2",
+    "mongoose": "~4.2.5",
+    "twitter": "~1.2.5",
+    "winston": "~2.1.0"
+  }
+}
