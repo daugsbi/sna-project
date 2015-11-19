@@ -20,13 +20,12 @@ function lookupUser(users){
         var params = {user_id : userids}; // Userids in comma seperated list expected by api
         console.log(params);
         client.get('users/lookup', params, function(error, accounts, response){
-            if(error) return winston.log("error", "Error is %s", error);
+            if(error) return winston.log("error", "Error is %s", error[0].message);
             accounts.forEach(function(account) {
                 updateUser(account);
             });
         });
     }
-    return;
 }
 
 function updateUser(user){
