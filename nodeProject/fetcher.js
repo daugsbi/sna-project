@@ -21,23 +21,6 @@ function requestFollowers(user, params){
 
                 var newUser = new User({
                     id: id
-                    /* id_str: friend.id_str,
-                     name: friend.name,
-                     screen_name: friend.screen_name,
-                     location: friend.location,
-                     description: friend.description,
-                     url: friend.url,
-                     protected: friend.protected,
-                     followers_count: friend.followers_count,
-                     friends_count: friend.friends_count,
-                     listed_count: friend.listed_count,
-                     created_at: friend.created_at,
-                     favourites_count: friend.favourites_count,
-                     statuses_count: friend.statuses_count,
-                     lang: friend.lang,
-                     retweet_count: friend.retweet_count,
-                     place: friend.place,
-                     profile_background_color: friend.profile_background_color*/
                 });
 
                 var edge = new Edge({
@@ -46,29 +29,29 @@ function requestFollowers(user, params){
                     value: 0
                 });
 
-                newUser.save(function(err){
+                newUser.save(function(err, user, numAffected){
                     if(err){
                         winston.log('error', err);
                     }else{
-                        winston.log('info', "User %s created", id );
+                        winston.log('info', "User %s created", user.id );
                     }
                 });
 
-                edge.save(function(err){
+                edge.save(function(err, edge, numAffected){
                     if(err){
                         winston.log('error', err);
                     }else{
-                        winston.log('info', "Edge from %d to %d created", user.id, id );
+                        winston.log('info', "Edge from %d to %d created", edge.from, edge.to );
                     }
                 });
             });
+
+            if(account.next_cursor > 0){
+                requestFollowers(user, {screen_name: user.screen_name, cursor: account.next_cursor, count:5000});
+                winston.log('info', "There are more than 5000 followers, render more %s", account.next_cursor);
+            }
         }else{
             winston.log('error', error);
-        }
-
-        if(account.next_cursor > 0){
-            requestFriends(user, account.next_cursor);
-            winston.log('info', "There are more than 5000 friends, render more %s", account.next_cursor);
         }
 
     });
@@ -92,30 +75,30 @@ function requestFriends(user, params){
                     value: 0
                 });
 
-                newUser.save(function(err){
+                newUser.save(function(err, user){
                     if(err){
                         winston.log('error', err);
                     }else{
-                        winston.log('info', "User %s created", id );
+                        winston.log('info', "User %d created", user.id );
                     }
                 });
 
-                edge.save(function(err){
+                edge.save(function(err, edge){
                     if(err){
                         winston.log('error', err);
                     }else{
-                        winston.log('info', "Edge from %d to %d created", id, user.id );
+                        winston.log('info', "Edge from %d to %d created", edge.from, edge.to );
                     }
                 });
 
 
             });
+            if(account.next_cursor > 0){
+                requestFriends(user, {screen_name: user.screen_name, cursor: account.next_cursor, count:5000});
+                winston.log('info', "There are more than 5000 friends, render more %s", account.next_cursor);
+            }
         }else{
             winston.log('error', error);
-        }
-        if(account.next_cursor > 0){
-            requestFriends(user, account.next_cursor);
-            winston.log('info', "There are more than 5000 friends, render more %s", account.next_cursor);
         }
     });
 }

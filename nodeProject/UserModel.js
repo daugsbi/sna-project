@@ -22,7 +22,8 @@ var userSchema = new Schema(
         lang: String,
         retweet_count: Number,
         place: String,
-        profile_background_color: String
+        profile_background_color: String,
+        networkLevel: Number
     });
 
 // the schema is useless so far

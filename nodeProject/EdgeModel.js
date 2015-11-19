@@ -8,7 +8,10 @@ var edgeSchema = new Schema(
         from: Number,
         to: Number,
         value: String
-    });
+    }
+);
+
+edgeSchema.index({from: 1, to: 1}, {unique: true});
 
 // the schema is useless so far
 // we need to create a model using it
