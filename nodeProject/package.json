@@ -12,6 +12,7 @@
     "gexf-writer": "~0.1.2",
     "mongoose": "~4.2.5",
     "twitter": "~1.2.5",
-    "winston": "~2.1.0"
+    "winston": "~2.1.0",
+    "cron": "~1.0.9"
   }
 }

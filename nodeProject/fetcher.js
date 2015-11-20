@@ -24,8 +24,8 @@ function requestFollowers(user, params){
                 });
 
                 var edge = new Edge({
-                    from: user.id,
-                    to: id,
+                    from: id,
+                    to: user.id,
                     value: 0
                 });
 
@@ -70,8 +70,8 @@ function requestFriends(user, params){
                 });
 
                 var edge = new Edge({
-                    from: id,
-                    to: user.id,
+                    from: user.id,
+                    to: id,
                     value: 0
                 });
 
