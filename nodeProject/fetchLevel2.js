@@ -263,6 +263,19 @@ function requestData(){
     });
 }
 
+/**
+ * Gets the data for the largest few users
+ */
+function requestLargest() {
+  var largestUsers = User.find().sort(folowers_count: -1).limit(15);
+  largestUsers.exec(function(err, users) {
+    if (err) return winston.log("error", "Query execution failed");
+    users.forEach(function user) {
+      requestUserIds(user);
+    }
+  });
+}
+
 // Execute regulary
 var CronJob = require('cron').CronJob;
 
