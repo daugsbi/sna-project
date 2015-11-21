@@ -45,9 +45,8 @@ function requestFollowers(user, params){
                         winston.log('info', "Edge from %d to %d created", user.id, id );
                     }
                 });
-
-                markAsEdited(user);
             });
+            markAsEdited(user);
         }else{
             winston.log('error', error);
         }
@@ -151,9 +150,8 @@ function requestFriends(user, params){
                         winston.log('info', "Edge from %d to %d created", id, user.id );
                     }
                 });
-
-                markAsEdited(user);
             });
+            markAsEdited(user);
         }else{
             winston.log('error', error);
         }
@@ -214,9 +212,8 @@ function requestFriendsList(user, params){
                         winston.log('info', "Edge from %d to %d created", u.id, user.id );
                     }
                 });
-
-                markAsEdited(user);
             });
+            markAsEdited(user);
         }else{
             winston.log('error', error);
         }
