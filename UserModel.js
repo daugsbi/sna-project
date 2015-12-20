@@ -1,4 +1,6 @@
-// grab the things we need
+/**
+ * Represents a User to save in the Mongodb
+ */
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 

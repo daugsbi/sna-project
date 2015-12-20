@@ -1,3 +1,7 @@
+/**
+ * Fill in your own credentials here
+ * @type {Twitter|exports}
+ */
 var Twitter = require('twitter');
 var client = new Twitter({
     consumer_key: 'PgZasVwjTIY390iaGp5grzBXx',

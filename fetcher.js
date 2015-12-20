@@ -1,5 +1,6 @@
 /**
- * Created by puravida on 12.11.15.
+ * Requests the Followers and Friends from person of interest.
+ * See requestUser param at the bottom for current person of interest.
  */
 var winston = require('winston');
 winston.add(winston.transports.File, { filename: 'info.log' });
@@ -45,7 +46,7 @@ function requestFollowers(user, params){
                     }
                 });
             });
-
+            // Process next bunch of data
             if(account.next_cursor > 0){
                 requestFollowers(user, {screen_name: user.screen_name, cursor: account.next_cursor, count:5000});
                 winston.log('info', "There are more than 5000 followers, render more %s", account.next_cursor);
@@ -93,6 +94,7 @@ function requestFriends(user, params){
 
 
             });
+            // Process next bunch of data
             if(account.next_cursor > 0){
                 requestFriends(user, {screen_name: user.screen_name, cursor: account.next_cursor, count:5000});
                 winston.log('info', "There are more than 5000 friends, render more %s", account.next_cursor);

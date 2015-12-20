@@ -1,4 +1,7 @@
-// grab the things we need
+/**
+ * Represents an Edge
+ * From follows to
+ */
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 

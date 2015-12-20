@@ -1,5 +1,5 @@
 /**
- * Created by puravida on 30.11.15.
+ * Exports the related user and edges
  */
 
 var User = require('./UserModel');
@@ -29,7 +29,7 @@ mongoose.connect('mongodb://localhost/test');
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
 db.once('open', function(equ){
-    var listUser = User.find({"resolved" : true, "networkLevel" : 2, "protected": false }).limit(2000).sort({ id: 1 });
+    var listUser = User.find({"resolved" : true, "networkLevel" : 2, "protected": false }).sort({ id: 1 });
     listUser.exec(function (err, users) {
         var userCounter = 1;
         var max = users.length - 1;
@@ -39,7 +39,7 @@ db.once('open', function(equ){
                     name: user.screen_name,
                     followers_count: user.followers_count
             });
-
+            // Request Edges to this User
             var edgesInNetwork = Edge.find({"to": user.id});
 
             edgesInNetwork.exec(function(err, edges) {
@@ -53,7 +53,7 @@ db.once('open', function(equ){
             }).then(function(){
                 userCounter++;
                 if(userCounter >= max || (userCounter % 100) == 0){
-                    // Save to file
+                    // Save to file from time to time
                     fs.writeFile("lukasReimann.gexf", doc.toString(), function(err) {
                         if(err) {
                             return console.log(err);
@@ -65,10 +65,5 @@ db.once('open', function(equ){
 
             console.log("Added " + user.screen_name);
         });
-
-
     });
-
-
-
 });

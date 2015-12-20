@@ -1,5 +1,5 @@
 /**
- * Created by puravida on 19.11.15.
+ * Fetch all users at level 2.
  */
 var winston = require('winston');
 winston.add(winston.transports.File, { filename: 'infoFetch2.log' });
@@ -10,7 +10,7 @@ var User = require('./UserModel');
 var Edge = require('./EdgeModel');
 
 /**
- * Request followers via followers/ids. API Limit is 5000 followers per 15 min.
+ * Request followers via followers/ids. API Limit is 15*5000 followers per 15 min.
  * @param user
  * @param params
  */
@@ -54,6 +54,11 @@ function requestFollowers(user, params){
     });
 }
 
+/**
+ * Request followers via followers/list. API Limit is 15*200 followers per 15 min.
+ * @param user
+ * @param params
+ */
 function requestFollowersList(user, params){
     client.get('followers/list', params, function(error, account, response){
         if (!error){
@@ -159,7 +164,7 @@ function requestFriends(user, params){
 }
 
 /**
- * Request friends via friends/list. API Limit is 30 * max. 200 Friends per 15 min.
+ * Request friends via friends/list. API Limit is 15 * max. 200 Friends per 15 min.
  * @param user
  * @param params
  */
@@ -220,6 +225,10 @@ function requestFriendsList(user, params){
     });
 }
 
+/**
+ * Updates user as resolved, it won't request this user anymore
+ * @param user
+ */
 function markAsEdited(user){
     User.update({id:user.id}, { $set: {
         "resolved": true
@@ -242,6 +251,9 @@ function requestUserList(user){
     requestFriendsList(user, params);
 }
 
+/**
+ * Main functionality every 15.5 Min. called
+ */
 function requestData(){
     var listFollowers = User.find({"resolved" : { $exists : false }, "networkLevel" : 2, "followers_count": {$lt: 200}, "protected": false }).limit(15).sort({ id: 1 });
     listFollowers.exec(function (err, users) {
@@ -260,30 +272,14 @@ function requestData(){
     });
 }
 
-/**
- * Gets the data for the largest few users
- */
-function requestLargest() {
-  var largestUsers = User.find().sort(folowers_count: -1).limit(15);
-  largestUsers.exec(function(err, users) {
-    if (err) return winston.log("error", "Query execution failed");
-    users.forEach(function user) {
-      requestUserIds(user);
-    }
-  });
-}
-
-// Execute regulary
-var CronJob = require('cron').CronJob;
-
 var mongoose = require('mongoose');
 mongoose.connect('mongodb://localhost/test');
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
 db.once('open', function(equ){
-
+    // Execute regularly
     for (var i = 0; i < 100; i++) {
         var timeOut = i*1000*60*15.5;
-        setTimeout(requestData, timeOut ); // Call every 15.5 min. (30 s for all request)
+        setTimeout(requestData, timeOut ); // Call every 15.5 min. (30s seperation time, otherwise api limit is disturbed)
     }
 });
